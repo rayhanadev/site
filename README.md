@@ -19,7 +19,7 @@ Pushes to `main` trigger three GitHub Actions jobs:
 
 1. **Build image** — builds the Docker image and pushes it to `ghcr.io/rayhanadev/site`
 2. **Deploy server** (after build) — SSHs into the GCP instance via Tailscale, pulls the new image, and restarts via Docker Compose
-3. **Deploy static assets** — deploys `public/` to Cloudflare Workers via Wrangler
+3. **Deploy static assets** — deploys `internal/assets/static/` to Cloudflare Workers via Wrangler
 
 ### GitHub Actions Secrets
 
