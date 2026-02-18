@@ -13,9 +13,11 @@ type Template struct {
 	Head, Tail string
 }
 
-// Safari won't start rendering until it receives ~1KB of data.
-// Pad the initial response to cross this threshold.
-var safariPad = "<!-- " + strings.Repeat(" ", 1024) + " -->"
+// iOS Safari won't start rendering until it receives ~1KB of renderable data.
+// HTML comments don't count toward this threshold, so we use zero-width spaces
+// (U+200B) instead — invisible but renderable characters. Each is 3 bytes in
+// UTF-8, so 342 characters = 1026 bytes, just over the 1KB threshold.
+var safariPad = strings.Repeat("\u200B", 342)
 
 func RenderHTML(w http.ResponseWriter, f http.Flusher, r *http.Request, tmpl Template, nodes []Node) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
