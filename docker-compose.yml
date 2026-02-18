@@ -1,6 +1,6 @@
 services:
   site:
-    build: .
+    image: ghcr.io/rayhanadev/site:latest
     restart: unless-stopped
     ports:
       - "8443:8443"
