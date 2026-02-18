@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -12,9 +13,14 @@ type Template struct {
 	Head, Tail string
 }
 
+// Safari won't start rendering until it receives ~1KB of data.
+// Pad the initial response to cross this threshold.
+var safariPad = "<!-- " + strings.Repeat(" ", 1024) + " -->"
+
 func RenderHTML(w http.ResponseWriter, f http.Flusher, r *http.Request, tmpl Template, nodes []Node) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	_, _ = fmt.Fprint(w, tmpl.Head)
+	_, _ = fmt.Fprint(w, safariPad)
 	f.Flush()
 
 	stream := newStreamer(14)
