@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Ray Arayilakath
+N:Arayilakath;Ray;;;
+TEL;TYPE=MOBILE:+18174707345
+EMAIL;TYPE=HOME:me@rayhanadev.com
+PHOTO;VALUE=URI:https://rayhanadev.com/headshot-alt.png
+NOTE:https://rayhanadev.com
+LANG:en-US
+REV:2026-02-18T21:41:53.792Z
+SOCIALPROFILE;TYPE=Twitter:https://x.com/rayhanadev
+SOCIALPROFILE;TYPE=LinkedIn:https://www.linkedin.com/in/rayhanadev
+SOCIALPROFILE;TYPE=GitHub:https://github.com/rayhanadev
+END:VCARD

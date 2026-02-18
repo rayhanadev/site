@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+tasks:
+  dev:
+    desc: Run the development server
+    cmds:
+      - go run .
+
+  build:
+    desc: Build the site binary
+    cmds:
+      - go build -o bin/site .
+
+  lint:
+    desc: Run the linter
+    cmds:
+      - golangci-lint run ./...
+
+  format:
+    desc: Format Go source files
+    cmds:
+      - gofmt -w .
+
+  deploy:static:
+    desc: Deploy static assets via Wrangler
+    cmds:
+      - wrangler deploy

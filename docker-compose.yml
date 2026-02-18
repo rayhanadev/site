@@ -1,0 +1,14 @@
+services:
+  site:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+      - "8443:8443/udp"
+    volumes:
+      - ./configs/certs:/certs:ro
+    environment:
+      - LISTEN_ADDR=:8443
+      - TLS_CERT_PATH=/certs/cert.pem
+      - TLS_KEY_PATH=/certs/key.pem
+      - COMMIT_HASH=${COMMIT_HASH:-dev}

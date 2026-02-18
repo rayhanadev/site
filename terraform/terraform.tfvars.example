@@ -1,0 +1,23 @@
+# -----------------------------------------------------------------------------
+# Required — fill these in and rename to terraform.tfvars
+# -----------------------------------------------------------------------------
+
+gcp_project_id = "my-gcp-project-id"
+
+cloudflare_api_token = "cf-api-token-with-zone-dns-origin-ca-permissions"
+cloudflare_zone_id   = "your-cloudflare-zone-id"
+
+tailscale_oauth_client_id     = "your-tailscale-oauth-client-id"
+tailscale_oauth_client_secret = "your-tailscale-oauth-client-secret"
+tailscale_tailnet             = "your-tailnet-name"
+
+# -----------------------------------------------------------------------------
+# Optional — uncomment to override defaults
+# -----------------------------------------------------------------------------
+
+# gcp_region     = "us-central1"
+# gcp_zone       = "us-central1-a"
+# domain         = "rayhanadev.com"
+# instance_name  = "rayhanadevcom"
+# machine_type   = "e2-micro"
+# site_repo_url  = "https://github.com/rayhanadev/site.git"

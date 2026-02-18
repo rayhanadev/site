@@ -1,0 +1,6 @@
+{
+	"name": "static",
+	"assets": {
+    "directory": "./public",
+  }
+}

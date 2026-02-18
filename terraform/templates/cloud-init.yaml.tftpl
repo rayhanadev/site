@@ -1,0 +1,73 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - ca-certificates
+  - curl
+  - gnupg
+  - git
+
+write_files:
+  # Origin CA certificate (temporary location before repo clone)
+  - path: /tmp/origin-cert.pem
+    permissions: "0644"
+    content: |
+      ${indent(6, origin_cert_pem)}
+
+  # Origin private key (temporary location before repo clone)
+  - path: /tmp/origin-key.pem
+    permissions: "0600"
+    content: |
+      ${indent(6, origin_key_pem)}
+
+  # Systemd service for site auto-restart on reboot
+  - path: /etc/systemd/system/website.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=Personal Site (Docker Compose)
+      Requires=docker.service
+      After=docker.service
+
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      WorkingDirectory=/opt/site
+      ExecStart=/usr/bin/docker compose up -d --build
+      ExecStop=/usr/bin/docker compose down
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  # --- Install Docker CE ---
+  - install -m 0755 -d /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  - chmod a+r /etc/apt/keyrings/docker.asc
+  - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" > /etc/apt/sources.list.d/docker.list
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+  # --- Install and configure Tailscale ---
+  - curl -fsSL https://tailscale.com/install.sh | sh
+  - tailscale up --auth-key=${tailscale_auth_key} --ssh
+
+  # --- Clone site repo ---
+  - git clone ${site_repo_url} /opt/site
+
+  # --- Write TLS certs into repo ---
+  - mkdir -p /opt/site/configs/certs
+  - cp /tmp/origin-cert.pem /opt/site/configs/certs/cert.pem
+  - cp /tmp/origin-key.pem /opt/site/configs/certs/key.pem
+  - chmod 644 /opt/site/configs/certs/cert.pem
+  - chmod 600 /opt/site/configs/certs/key.pem
+  - rm /tmp/origin-cert.pem /tmp/origin-key.pem
+
+  # --- Start the site ---
+  - cd /opt/site && COMMIT_HASH=$(git rev-parse --short HEAD) docker compose up -d --build
+
+  # --- Enable auto-restart on reboot ---
+  - systemctl daemon-reload
+  - systemctl enable website.service
