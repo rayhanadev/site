@@ -26,6 +26,18 @@
 			"zone_name": "rayhanadev.com"
 		},
 		{
+			"pattern": "rayhanadev.com/apple-touch-icon.png",
+			"zone_name": "rayhanadev.com"
+		},
+		{
+			"pattern": "rayhanadev.com/web-app-manifest-192x192.png",
+			"zone_name": "rayhanadev.com"
+		},
+		{
+			"pattern": "rayhanadev.com/web-app-manifest-512x512.png",
+			"zone_name": "rayhanadev.com"
+		},
+		{
 			"pattern": "rayhanadev.com/manifest.json",
 			"zone_name": "rayhanadev.com"
 		},

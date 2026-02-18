@@ -35,3 +35,4 @@ configs/certs/*
 
 # Bun
 node_modules/
+.wrangler
