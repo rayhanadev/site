@@ -32,3 +32,6 @@ configs/certs/*
 *.tfstate.backup
 *.tfvars
 !*.tfvars.example
+
+# Bun
+node_modules/
