@@ -18,7 +18,7 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no ray@rayhanadevcom \
+          ssh -o StrictHostKeyChecking=no ray@cloud \
             'cd /opt/site && sudo git pull origin main && sudo COMMIT_HASH=$(git rev-parse --short HEAD) docker compose up -d --build'
 
   deploy-static:
