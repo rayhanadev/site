@@ -4,10 +4,4 @@
   <rect x="22" y="11" width="11" height="11"/>
   <rect y="22" width="11" height="11"/>
   <rect x="22" y="22" width="11" height="11"/>
-  <style>
-    rect { fill: #000; }
-    @media (prefers-color-scheme: dark) {
-      rect { fill: #fff; }
-    }
-  </style>
 </svg>
