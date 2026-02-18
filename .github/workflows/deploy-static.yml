@@ -1,0 +1,29 @@
+name: Deploy Static Assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "internal/assets/static/**"
+      - "wrangler.jsonc"
+      - "package.json"
+      - ".github/workflows/deploy-static.yml"
+
+jobs:
+  deploy-static:
+    name: Deploy static assets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Deploy to Cloudflare Workers
+        run: bunx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

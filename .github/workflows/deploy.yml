@@ -1,8 +1,17 @@
-name: Deploy
+name: Deploy Server
 
 on:
   push:
     branches: [main]
+    paths:
+      - "main.go"
+      - "internal/**"
+      - "!internal/assets/static/**"
+      - "go.mod"
+      - "go.sum"
+      - "Dockerfile"
+      - "docker-compose.yml"
+      - ".github/workflows/deploy.yml"
 
 jobs:
   build-image:
@@ -36,7 +45,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy-site:
-    name: Deploy server binary
+    name: Deploy server
     runs-on: ubuntu-latest
     needs: build-image
     steps:
@@ -51,21 +60,3 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ray@cloud \
             'cd /opt/site && sudo git pull origin main && sudo COMMIT_HASH=$(git rev-parse --short HEAD) docker compose pull && sudo COMMIT_HASH=$(git rev-parse --short HEAD) docker compose up -d --no-build'
-
-  deploy-static:
-    name: Deploy static assets
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Deploy to Cloudflare Workers
-        run: bunx wrangler deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
