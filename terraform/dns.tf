@@ -71,3 +71,27 @@ resource "cloudflare_ruleset" "www_redirect" {
     }
   }]
 }
+
+# -----------------------------------------------------------------------------
+# Origin Rule — route traffic to port 8443
+# -----------------------------------------------------------------------------
+
+resource "cloudflare_ruleset" "origin_port" {
+  zone_id     = var.cloudflare_zone_id
+  name        = "origin-port"
+  description = "Route origin traffic to port 8443"
+  kind        = "zone"
+  phase       = "http_request_origin"
+
+  rules = [{
+    ref         = "origin_port_8443"
+    description = "Set origin port to 8443"
+    expression  = "(http.host eq \"${var.domain}\")"
+    action      = "route"
+    action_parameters = {
+      origin = {
+        port = 8443
+      }
+    }
+  }]
+}
