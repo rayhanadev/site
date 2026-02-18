@@ -41,6 +41,7 @@ func main() {
 		}
 
 		w.Header().Set("Alt-Svc", `h3="`+addr+`"; ma=86400`)
+		w.Header().Set("X-Accel-Buffering", "no")
 		accept := r.Header.Get("Accept")
 
 		if strings.Contains(accept, "text/html") {
