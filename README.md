@@ -56,9 +56,6 @@ Pushes to `main` trigger two parallel GitHub Actions jobs:
 |--------|-------------|
 | `TS_OAUTH_CLIENT_ID` | Tailscale OAuth client ID |
 | `TS_OAUTH_SECRET` | Tailscale OAuth client secret |
-| `DEPLOY_HOST` | Tailscale hostname of the server |
-| `DEPLOY_USER` | SSH user on the server |
-| `DEPLOY_SSH_KEY` | SSH private key for deployment |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare API token for Wrangler |
 
 ## Infrastructure (Terraform)
