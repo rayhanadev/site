@@ -21,5 +21,4 @@ something interesting, please [say hi](mailto:me@rayhanadev.com)!
 
 PH: ([prev](https://ring.purduehackers.com/next) | [main](https://ring.purduehackers.com/main) | [next](https://ring.purduehackers.com/next)) · [twitter](https://x.com/rayhanadev) · [github](https://github.com/rayhanadev) · [linkedin](https://linkedin.com/in/rayhanadev)
 
-[pause:2000][stream:48](also this website is deployed on a toaster and streamed over
-http/3[stream:500]...[/stream][pause:500] source [here](https://github.com/rayhanadev/toaster) lol 🍞"૮₍  ˶•⤙•˶ ₎ა)[/stream]
+[pause:2000][stream:48](also this website is deployed on a gcp and streamed over http/3!)[/stream]
