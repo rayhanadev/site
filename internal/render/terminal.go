@@ -1,15 +1,18 @@
 package render
 
 import (
-	"fmt"
 	"net/http"
+	"strings"
 )
 
 const termWidth = 72
 
+var htmlStripper = strings.NewReplacer("<h1>", "", "</h1>", "")
+
 type termWrapper struct {
-	w   http.ResponseWriter
-	col int
+	buf           strings.Builder
+	col           int
+	pendingSpaces int
 }
 
 func (tw *termWrapper) writeText(s string) {
@@ -17,19 +20,21 @@ func (tw *termWrapper) writeText(s string) {
 	i := 0
 	for i < len(runes) {
 		if runes[i] == '\n' {
-			fmt.Fprint(tw.w, "\n")
+			tw.buf.WriteByte('\n')
 			tw.col = 0
+			tw.pendingSpaces = 0
 			i++
 			continue
 		}
 
-		// Count spaces
-		spaces := 0
+		spaces := tw.pendingSpaces
+		tw.pendingSpaces = 0
 		for i < len(runes) && runes[i] == ' ' {
 			spaces++
 			i++
 		}
 		if i >= len(runes) || runes[i] == '\n' {
+			tw.pendingSpaces = spaces
 			continue
 		}
 
@@ -42,17 +47,15 @@ func (tw *termWrapper) writeText(s string) {
 		wordLen := i - start
 
 		if tw.col == 0 {
-			fmt.Fprint(tw.w, word)
+			tw.buf.WriteString(word)
 			tw.col += wordLen
 		} else if tw.col+spaces+wordLen <= termWidth {
-			for j := 0; j < spaces; j++ {
-				fmt.Fprint(tw.w, " ")
-			}
-			fmt.Fprint(tw.w, word)
+			tw.buf.WriteString(strings.Repeat(" ", spaces))
+			tw.buf.WriteString(word)
 			tw.col += spaces + wordLen
 		} else {
-			fmt.Fprint(tw.w, "\n")
-			fmt.Fprint(tw.w, word)
+			tw.buf.WriteByte('\n')
+			tw.buf.WriteString(word)
 			tw.col = wordLen
 		}
 	}
@@ -62,17 +65,24 @@ func RenderTerminal(w http.ResponseWriter, nodes []Node) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 
-	tw := &termWrapper{w: w}
-	fmt.Fprint(w, "\n")
+	tw := &termWrapper{}
+	tw.buf.WriteByte('\n')
 
 	for _, n := range nodes {
 		switch n := n.(type) {
 		case TextNode:
-			tw.writeText(n.Content)
+			tw.writeText(htmlStripper.Replace(n.Content))
 		case LinkNode:
-			fmt.Fprintf(w, "\x1b]8;;%s\x07\x1b[4m", n.URL)
+			if tw.col > 0 && tw.pendingSpaces > 0 {
+				tw.buf.WriteString(strings.Repeat(" ", tw.pendingSpaces))
+				tw.col += tw.pendingSpaces
+				tw.pendingSpaces = 0
+			}
+			tw.buf.WriteString("\x1b]8;;" + n.URL + "\x07\x1b[4m")
 			tw.writeText(n.Text)
-			fmt.Fprint(w, "\x1b[24m\x1b]8;;\x07")
+			tw.buf.WriteString("\x1b[24m\x1b]8;;\x07")
 		}
 	}
+
+	_, _ = w.Write([]byte(tw.buf.String()))
 }
