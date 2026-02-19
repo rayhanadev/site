@@ -1,6 +1,6 @@
-<img width="567" height="515" alt="image" src="https://github.com/user-attachments/assets/d3971a30-9f56-44fd-b951-64fff18740f6" />
+<img alt="image" src="https://github.com/user-attachments/assets/d5d6a6d6-a43f-48ce-b4ef-6cae4feab856" />
 
-# rayhanadev.com
+# rayhanadev[dot]com
 
 Go HTTP/3 server with a custom typewriter markup parser that streams content character-by-character to browsers and renders ANSI-styled text for terminals (`curl https://rayhanadev.com`).
 
