@@ -34,6 +34,18 @@ func main() {
 			return
 		}
 
+		ua := r.UserAgent()
+
+		if render.IsTerminal(ua) {
+			render.RenderTerminal(w, nodes)
+			return
+		}
+
+		if render.IsBot(ua) {
+			render.RenderHTMLInstant(w, tmpl, nodes)
+			return
+		}
+
 		flusher, ok := w.(http.Flusher)
 		if !ok {
 			http.Error(w, "streaming not supported", http.StatusInternalServerError)
@@ -42,13 +54,8 @@ func main() {
 
 		w.Header().Set("Alt-Svc", `h3="`+addr+`"; ma=86400`)
 		w.Header().Set("X-Accel-Buffering", "no")
-		accept := r.Header.Get("Accept")
 
-		if strings.Contains(accept, "text/html") {
-			render.RenderHTML(w, flusher, r, tmpl, nodes)
-		} else {
-			render.RenderTerminal(w, flusher, r, nodes)
-		}
+		render.RenderHTML(w, flusher, r, tmpl, nodes)
 	})
 
 	cert, err := tls.LoadX509KeyPair(certPath, keyPath)
