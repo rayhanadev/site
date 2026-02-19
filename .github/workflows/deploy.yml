@@ -59,4 +59,4 @@ jobs:
       - name: Deploy via SSH
         run: |
           ssh -o StrictHostKeyChecking=no ray@cloud \
-            'cd /opt/site && sudo git pull origin main && sudo COMMIT_HASH=$(git rev-parse --short HEAD) docker compose pull && sudo COMMIT_HASH=$(git rev-parse --short HEAD) docker compose up -d --no-build'
+            'cd /opt/site && sudo git pull origin main && sudo docker compose pull && sudo docker compose up -d --no-build'

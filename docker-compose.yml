@@ -11,4 +11,3 @@ services:
       - LISTEN_ADDR=:8443
       - TLS_CERT_PATH=/certs/cert.pem
       - TLS_KEY_PATH=/certs/key.pem
-      - COMMIT_HASH=${COMMIT_HASH:-dev}

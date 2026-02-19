@@ -5,8 +5,7 @@ on:
     branches: [main]
     paths:
       - "internal/assets/static/**"
-      - "wrangler.jsonc"
-      - "package.json"
+      - "cmd/generate-wrangler-config/**"
       - ".github/workflows/deploy-static.yml"
 
 jobs:
@@ -19,8 +18,16 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies
-        run: bun install
+      - name: Install wrangler
+        run: bun add -d wrangler
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Generate wrangler config
+        run: go run ./cmd/generate-wrangler-config
 
       - name: Deploy to Cloudflare Workers
         run: bunx wrangler deploy

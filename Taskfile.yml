@@ -23,7 +23,29 @@ tasks:
     cmds:
       - gofmt -w .
 
+  generate:wrangler:
+    desc: Generate wrangler.jsonc from static assets directory
+    cmds:
+      - go run ./cmd/generate-wrangler-config
+
   deploy:static:
     desc: Deploy static assets via Wrangler
+    deps: [generate:wrangler]
     cmds:
-      - wrangler deploy
+      - bunx wrangler deploy
+
+  deploy:server:build:
+    desc: Build and push Docker image to GHCR
+    cmds:
+      - docker buildx build --push
+        -t ghcr.io/rayhanadev/site:latest
+        -t ghcr.io/rayhanadev/site:$(git rev-parse HEAD)
+        --cache-from type=gha --cache-to type=gha,mode=max .
+
+  deploy:server:
+    desc: Deploy server via SSH
+    cmds:
+      - ssh ray@cloud
+        'cd /opt/site && sudo git pull origin main &&
+        sudo docker compose pull &&
+        sudo docker compose up -d --no-build'

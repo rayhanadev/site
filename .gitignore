@@ -35,4 +35,9 @@ configs/certs/*
 
 # Bun
 node_modules/
+package.json
+bun.lock
 .wrangler
+
+# Generated
+wrangler.jsonc

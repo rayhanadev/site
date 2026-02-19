@@ -66,7 +66,7 @@ runcmd:
   - rm /tmp/origin-cert.pem /tmp/origin-key.pem
 
   # --- Start the site ---
-  - cd /opt/site && docker compose pull && COMMIT_HASH=$(git rev-parse --short HEAD) docker compose up -d
+  - cd /opt/site && docker compose pull && docker compose up -d
 
   # --- Enable auto-restart on reboot ---
   - systemctl daemon-reload
