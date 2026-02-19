@@ -4,20 +4,15 @@
 
 Hi, I'm Ray! ( •ᴗ•)⸝
 
-Right now I'm an engineer at [Million](https://million.dev) (YC W24), where I work on
-infrastructure that lets humans build software at scale with AI
-agents. Before that, I was at Replit fighting spam and abuse, at
-Deel shipping marketing tools, and a mix of SWE roles in-between.
+Right now I'm an engineer at [Million](https://million.dev) (YC W24), where I work on infrastructure that lets humans build software at scale with AI agents. Before that, I was at Replit fighting spam and abuse, at Deel shipping marketing tools, and a mix of SWE roles in-between.
 
-I'm also President of [Purdue Hackers](https://purduehackers.com), where I get to create spaces
-for people to build wacky and ambitious things together.
+I'm also President of [Purdue Hackers](https://purduehackers.com), where I get to create spaces for people to build wacky and ambitious things together.
 
 I write occasionally about cool tech stuff I build on my [Substack](https://rayhanadev.substack.com).
 
-I like hard problems and cool people. If you're working on
-something interesting, please [say hi](mailto:me@rayhanadev.com)!
+I like hard problems and cool people. If you're working on something interesting, please [say hi](mailto:me@rayhanadev.com)!
 
-[stream:6]——————————————————————————————————————————————————————————————————[/stream]
+[clip][stream:6]——————————————————————————————————————————————————————————————————[/stream][/clip]
 
 PH: ([prev](https://ring.purduehackers.com/prev) | [main](https://ring.purduehackers.com/) | [next](https://ring.purduehackers.com/next)) · [twitter](https://x.com/rayhanadev) · [github](https://github.com/rayhanadev) · [linkedin](https://linkedin.com/in/rayhanadev)
 

@@ -14,12 +14,16 @@ type LinkNode struct{ Text, URL string }
 type StreamNode struct{ Speed int }
 type CloseStreamNode struct{}
 type PauseNode struct{ Duration int }
+type ClipNode struct{}
+type CloseClipNode struct{}
 
 func (TextNode) node()        {}
 func (LinkNode) node()        {}
 func (StreamNode) node()      {}
 func (CloseStreamNode) node() {}
 func (PauseNode) node()       {}
+func (ClipNode) node()        {}
+func (CloseClipNode) node()   {}
 
 func Parse(input string) []Node {
 	runes := []rune(input)
@@ -140,6 +144,12 @@ func parseTag(runes []rune, pos int) (Node, int) {
 
 	if tag == "/stream" {
 		return CloseStreamNode{}, end
+	}
+	if tag == "clip" {
+		return ClipNode{}, end
+	}
+	if tag == "/clip" {
+		return CloseClipNode{}, end
 	}
 	if after, ok := strings.CutPrefix(tag, "stream:"); ok {
 		if n, err := strconv.Atoi(after); err == nil {

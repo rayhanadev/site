@@ -48,6 +48,12 @@ func RenderHTML(w http.ResponseWriter, f http.Flusher, r *http.Request, tmpl Tem
 			stream.pop()
 		case PauseNode:
 			time.Sleep(time.Duration(n.Duration) * time.Millisecond)
+		case ClipNode:
+			_, _ = fmt.Fprint(w, `<span style="display:block;overflow:hidden;white-space:nowrap">`)
+			f.Flush()
+		case CloseClipNode:
+			_, _ = fmt.Fprint(w, "</span>")
+			f.Flush()
 		}
 	}
 
@@ -65,6 +71,10 @@ func RenderHTMLInstant(w http.ResponseWriter, tmpl Template, nodes []Node) {
 			_, _ = fmt.Fprint(w, n.Content)
 		case LinkNode:
 			_, _ = fmt.Fprintf(w, `<a href="%s"%s>%s</a>`, html.EscapeString(n.URL), linkTarget(n.URL), n.Text)
+		case ClipNode:
+			_, _ = fmt.Fprint(w, `<span style="display:block;overflow:hidden;white-space:nowrap">`)
+		case CloseClipNode:
+			_, _ = fmt.Fprint(w, "</span>")
 		}
 	}
 
