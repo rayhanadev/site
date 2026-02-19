@@ -1,25 +1,36 @@
+<img width="567" height="515" alt="image" src="https://github.com/user-attachments/assets/d3971a30-9f56-44fd-b951-64fff18740f6" />
+
 # rayhanadev.com
 
-Go HTTP/3 server that streams content character-by-character. Serves HTML to browsers and ANSI-styled text to terminals (`curl https://rayhanadev.com`).
+Go HTTP/3 server with a custom typewriter markup parser that streams content character-by-character to browsers and renders ANSI-styled text for terminals (`curl https://rayhanadev.com`).
 
 ## Development
 
-Requires Go 1.25+ and TLS certificates at `configs/certs/{cert,key}.pem`.
+Requires Go 1.25+ and TLS certificates (defaults to `configs/certs/{cert,key}.pem`, override with `TLS_CERT_PATH` / `TLS_KEY_PATH` env vars). Listen address defaults to `:3000` (override with `LISTEN_ADDR`).
 
 ```sh
-task dev          # run dev server on :3000
-task build        # compile to bin/site
-task lint         # golangci-lint
-task format       # gofmt
+task dev                  # run dev server on :3000
+task build                # compile to bin/site
+task lint                 # golangci-lint
+task format               # gofmt
+task generate:wrangler    # regenerate wrangler.jsonc from static assets
+task deploy:static        # generate wrangler config + deploy to Cloudflare Workers
+task deploy:server:build  # build and push Docker image to GHCR
+task deploy:server        # SSH into production and pull latest image
 ```
 
 ## Deployment
 
-Pushes to `main` trigger three GitHub Actions jobs:
+Two path-filtered GitHub Actions workflows run on pushes to `main`:
+
+**[Deploy Server](.github/workflows/deploy.yml)** — triggered by changes to Go source, `Dockerfile`, or `docker-compose.yml` (excludes `internal/assets/static/`):
 
 1. **Build image** — builds the Docker image and pushes it to `ghcr.io/rayhanadev/site`
 2. **Deploy server** (after build) — SSHs into the GCP instance via Tailscale, pulls the new image, and restarts via Docker Compose
-3. **Deploy static assets** — deploys `internal/assets/static/` to Cloudflare Workers via Wrangler
+
+**[Deploy Static Assets](.github/workflows/deploy-static.yml)** — triggered by changes to `internal/assets/static/` or the wrangler config generator:
+
+1. **Deploy static assets** — generates `wrangler.jsonc` from the static assets directory and deploys to Cloudflare Workers via Wrangler
 
 ### GitHub Actions Secrets
 
